@@ -1,0 +1,45 @@
+@page "/"
+
+@inject NavigationManager _manager;
+
+<AuthorizeView>
+    <NotAuthorized>
+    @if (true)
+        {
+            _manager.NavigateTo("/login");
+        }
+    </NotAuthorized>
+    <Authorized>
+        <NavBar></NavBar>
+        <div class="grid grid-cols-5 gap-4 justify-items-center mt-10">
+            <div></div>
+            <a class="flex justify-center flex-col" href="/Adults">
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                </svg>
+                <div class="flex justify-center">
+                    Adults
+                </div>
+            </a>
+            <a class="flex justify-center flex-col" href="/Families">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                <div class="flex justify-center">
+                    Family
+                </div>
+            </a>
+            <a class="flex justify-center flex-col" href="/Kids">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="flex justify-center">
+                    Kids
+                </div>
+            </a>
+            <div></div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+

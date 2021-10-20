@@ -1,0 +1,145 @@
+﻿@page "/adults"
+@using DNPAssigment1.Models
+@using DNPAssigment1.Persistance
+
+@inject NavigationManager NavigationManager;
+@inject IAdultServices iServices;
+
+ <AuthorizeView>
+     <NotAuthorized>
+     @if (true)
+         {
+             NavigationManager.NavigateTo("/login");
+         }
+     </NotAuthorized>
+     <Authorized>
+         <NavBar></NavBar>
+<div class="flex flex-col justify-center items-center">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 w-1/2 mt-2">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <input class="mt-2 mb-2 rounded" placeholder="Filter by name" @oninput="@(Filter)">
+      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y bg-gray-200 bg-opacity-60 shadow-md">
+          <thead class="bg-gray-200 bg-opacity-60 shadow-md">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Age
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Sex
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Job Title
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Settings
+            </th>
+            
+          </tr>
+          </thead>
+
+          <tbody class="bg-gray-200 bg-opacity-60 shadow-md divide-y divide-gray-200">
+
+          @foreach (var adult in adultstoshow)
+          {
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(adult.Id))">
+                <div class="flex items-center">
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      @adult.FirstName @adult.LastName
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(adult.Id))">
+                <div class="text-sm text-gray-900"></div>
+                <div class="text-sm text-gray-500">
+                  @adult.Age
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(adult.Id))">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  @adult.Sex
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(adult.Id))">
+                @adult.JobTitle.JobTitle
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => RemoveAdult(adult.Id))">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="48" height="48" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ff2825" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="10" y1="11" x2="10" y2="17" />
+                  <line x1="14" y1="11" x2="14" y2="17" />
+                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                </svg>
+              </td>              
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>     
+       </Authorized>
+ </AuthorizeView>
+
+
+@code {
+  private IList<Adult> adults = new List<Adult>();
+  private IList<Adult> adultstoshow = new List<Adult>();
+
+  protected override async Task OnInitializedAsync()
+  {
+    adults = await iServices.GetAdultsAsync();
+    Filter(new ChangeEventArgs());
+    await Task.Delay(1000);
+  }
+
+  private async void RemoveAdult(int Id)
+  {
+    await iServices.RemoveAdultAsync(Id);
+    adults = await iServices.GetAdultsAsync();
+
+    Filter(new ChangeEventArgs());
+
+    
+  }
+
+  private void Edit(int Id)
+  {
+    NavigationManager.NavigateTo($"EditAdult/{Id}");
+  }
+  private void Display(int Id)
+  {
+    NavigationManager.NavigateTo($"/Adult/{Id}");
+  }
+  
+  private void Filter(ChangeEventArgs args)
+  {
+    string filterByName = null;
+    try
+    {
+      filterByName = args.Value?.ToString();
+    }
+    catch (Exception e)
+    {
+      System.Console.WriteLine(e);
+    }
+    if (filterByName != null && !filterByName.Equals(""))
+    {
+      adultstoshow = adults.Where(t => t.FirstName.Contains(filterByName) || t.LastName.Contains(filterByName)).ToList();
+    }
+    else
+    {
+      adultstoshow = adults;
+    }
+  }
+  
+}

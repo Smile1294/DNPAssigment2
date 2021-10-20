@@ -1,0 +1,90 @@
+﻿@page "/Adult/{Id:int}"
+@using DNPAssigment1.Models
+@using DNPAssigment1.Persistance
+@using global::Models
+
+@inject NavigationManager NavigationManager;
+@inject IAdultServices iServices;
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        @if (true)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    </NotAuthorized>
+    <Authorized>
+        <NavBar></NavBar>
+        <div class="flex flex-col justify-center items-center">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 w-1/2 mt-2">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="bg-gray-200 bg-opacity-70 rounded flex flex-col">
+                        <div class="flex text-lg justify-center border-b">Adult</div>
+                        @if (adult != null)
+                        {
+                            <div class="text-md text-sm font-medium text-gray-900 ml-2 mt-2">
+                                Name: @adult.FirstName @adult.LastName - Job: @adult.JobTitle.JobTitle - Salary : @adult.JobTitle.Salary
+                                <div class="text-md ml-4 flex flex-col font-medium text-gray-500 ">
+                                    <div>
+                                        Eye Color <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.EyeColor"/>
+                                    </div>
+                                    <div>
+                                        Hair Color <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.HairColor"/>
+                                    </div>
+                                    <div>
+                                        Age <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.Age"/>
+                                    </div>
+                                    <div>
+                                        Sex <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.Sex"/>
+                                    </div>
+                                    <div>
+                                        Weight <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.Weight"/>
+                                    </div>
+                                    <div>
+                                        Height <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@adult.Height"/>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" @onclick="@save">
+                        Update
+                    </button>
+                     <button class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" @onclick="@back">
+                         Back
+                     </button>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Adult adult = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+        adult = await iServices.GetAdultAsync(Id);
+        
+    }
+
+    private async Task save()
+    {
+       await iServices.UpdateAdultsAsync(adult);
+       NavigationManager.NavigateTo("/Adults");
+
+    }
+
+    private void back()
+    {
+        
+        NavigationManager.NavigateTo("/Adults");
+    }
+
+}

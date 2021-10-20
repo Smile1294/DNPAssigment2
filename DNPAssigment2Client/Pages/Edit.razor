@@ -1,0 +1,60 @@
+﻿@page "/Edit/{Id:int}"
+@using global::Models
+@using DNPAssigment1.Persistance
+
+@inject NavigationManager NavigationManager;
+
+<AuthorizeView>
+    <NotAuthorized>
+        @if (true)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    </NotAuthorized>
+    <Authorized>
+        <NavBar></NavBar>
+        <div class="flex justify-center h-full items-center mt-52">
+                <div class="bg-gray-200 bg-opacity-70 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+                    <div class="mb-4">
+                        <label class="block text-grey-800 text-sm font-bold mb-2">
+                            Street
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@Family.StreetName"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-grey-800 text-sm font-bold mb-2">
+                            House Number
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Street Name" @bind-value="@Family.HouseNumber"/>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" @onclick="@save">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Family Family;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+
+    }
+
+    private void save()
+    {
+        
+        NavigationManager.NavigateTo("/families");
+    }
+
+}

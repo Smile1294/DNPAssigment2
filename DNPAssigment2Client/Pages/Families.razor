@@ -1,0 +1,128 @@
+﻿@page "/families"
+@using DNPAssigment1.Persistance
+@using global::Models
+
+@inject NavigationManager NavigationManager;
+ 
+ <AuthorizeView>
+     <NotAuthorized>
+     @if (true)
+         {
+             NavigationManager.NavigateTo("/login");
+         }
+     </NotAuthorized>
+     <Authorized>
+         <NavBar></NavBar>
+<div class="flex flex-col justify-center items-center">
+  <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 w-1/2 mt-2">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <input class="mt-2 mb-2 rounded" placeholder="Filter by name" @oninput="@(Filter)">
+      <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <table class="min-w-full divide-y bg-gray-200 bg-opacity-60 shadow-md">
+          <thead class="bg-gray-200 bg-opacity-60 shadow-md">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Family Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Adress
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Kids
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Pets
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            </th>
+          </tr>
+          </thead>
+
+          <tbody class="bg-gray-200 bg-opacity-60 shadow-md divide-y divide-gray-200">
+
+          @foreach (var family in familiestoshow)
+          {
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(family.Id))">
+                <div class="flex items-center">
+                  <div class="ml-4">
+                    <div class="text-sm font-medium text-gray-900">
+                      @family.Adults[0].LastName
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(family.Id))">
+                <div class="text-sm text-gray-900"></div>
+                <div class="text-sm text-gray-500">
+                  @family.StreetName
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(family.Id))">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  @family.Children.Count
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap" @onclick="@(() => Display(family.Id))">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  @family.Pets.Count
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button class="text-sm font-medium text-gray-900" @onclick="@(() => Edit(family.Id))">Edit</button>
+              </td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>     
+       </Authorized>
+ </AuthorizeView>
+
+
+@code {
+  private IList<Family> familiyes;
+  
+  private IList<Family> familiestoshow;
+
+  protected override async Task OnInitializedAsync()
+  {
+    Filter(new ChangeEventArgs());
+
+    await Task.Delay(1000);
+  }
+
+  private void Filter(ChangeEventArgs args)
+  {
+    string filterByName = null;
+    try
+    {
+      filterByName = args.Value?.ToString();
+    }
+    catch (Exception e)
+    {
+      System.Console.WriteLine(e);
+    }
+    if (filterByName != null && !filterByName.Equals(""))
+    {
+      familiestoshow = familiyes.Where(t => t.Adults[0].FirstName.Contains(filterByName) || t.Adults[0].LastName.Contains(filterByName)).ToList();
+    }
+    else
+    {
+      familiestoshow = familiyes;
+    }
+  }
+  
+  private void Edit(int Id)
+  {
+    NavigationManager.NavigateTo($"Edit/{Id}");
+  }
+  private void Display(int Id)
+  {
+    NavigationManager.NavigateTo($"Display/{Id}");
+  }
+  
+}

@@ -1,0 +1,67 @@
+﻿@page "/login"
+@using DNPAssigment1.Login
+
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
+
+<AuthorizeView>
+    <NotAuthorized>
+        
+        <div class="flex justify-center h-full items-center mt-52">
+            <div class="bg-gray-200 bg-opacity-70 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+                <div class="mb-4">
+                    <label class="block text-grey-800 text-sm font-bold mb-2">
+                        Username
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-800" type="text" placeholder="Username" @bind-value="username">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-grey-800 text-sm font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3" id="password" type="password" @bind-value="password" placeholder="************">
+                    <p class="text-red-600 text-md italic">@errorMessage</p>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" type="button" @onclick="@LoginTask">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </NotAuthorized>
+    <Authorized>
+        @if (true)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    </Authorized>
+</AuthorizeView>
+
+
+@code{
+
+    private string username;
+    private string password;
+    private string errorMessage;
+
+    public async Task LoginTask()
+    {
+        errorMessage = "";
+        try
+        {
+            await ((CustomAuthProvider) AuthenticationStateProvider).ValidateLogin(username, password);
+            username = "";
+            password = "";
+
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+        await Task.Delay(5);
+
+    }
+
+
+}

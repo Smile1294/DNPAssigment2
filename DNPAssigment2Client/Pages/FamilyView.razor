@@ -1,0 +1,108 @@
+﻿@page "/Display/{Id:int}"
+@using global::Models
+@using DNPAssigment1.Persistance
+@using DNPAssigment1.Models
+
+@inject NavigationManager NavigationManager;
+
+<AuthorizeView>
+    <NotAuthorized>
+        @if (true)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+    </NotAuthorized>
+    <Authorized>
+        <NavBar></NavBar>
+<div class="flex flex-col justify-center items-center">
+<div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 w-1/2 mt-2">
+    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="bg-gray-200 bg-opacity-70 rounded flex flex-col">
+            <div class="flex text-lg justify-center border-b">Adults</div>
+            @foreach (var adult in Family.Adults)
+            {
+                <div class="text-md text-sm font-medium text-gray-900 ml-2 mt-2">
+                    @adult.FirstName @adult.LastName - @adult.JobTitle.JobTitle
+                    <div class="text-md ml-4 flex flex-col font-medium text-gray-500 ">
+                        <div>
+                            Eye Color - @adult.EyeColor
+                        </div>
+                        <div>
+                            Hair Color - @adult.HairColor</div>
+                        <div>
+                            Age - @adult.Age
+                        </div>
+                        <div>
+                            Sex - @adult.Sex
+                        </div>
+                        <div>
+                            Weight - @adult.Weight
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="flex text-lg justify-center border-b border-t">Kids</div>
+            @foreach (var child in Family.Children)
+            {
+                <div class="text-md text-sm font-medium text-gray-900 ml-2 mt-2">
+                    @child.FirstName @child.LastName
+                    <div class="text-md ml-4 flex flex-col font-medium text-gray-500 ">
+                        <div>
+                            Eye Color - @child.EyeColor
+                        </div>
+                        <div>
+                            Hair Color - @child.HairColor
+                        </div>
+                        <div>
+                            Age - @child.Age
+                        </div>
+                        <div>
+                            Sex - @child.Sex
+                        </div>
+                        <div>
+                            Weight - @child.Weight
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="flex text-lg justify-center border-t">Pets</div>
+            @foreach (var pet in Family.Pets)
+                {
+                    <div class="text-md text-sm font-medium text-gray-900 ml-2 mt-2">
+                        @pet.Name
+                        <div class="text-md ml-4 flex flex-col font-medium text-gray-500 ">
+                            <div>
+                                Age - @pet.Age
+                            </div>
+                            <div>
+                                Spicies - @pet.Species
+                            </div>
+                        </div>
+                    </div>
+                }
+        </div>
+    </div>
+</div>
+</div>
+      </Authorized>
+    </AuthorizeView>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Family Family;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+    }
+
+    private void back()
+    {
+        
+        NavigationManager.NavigateTo("/families");
+    }
+
+}
