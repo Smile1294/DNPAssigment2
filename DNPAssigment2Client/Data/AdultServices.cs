@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -72,10 +73,7 @@ namespace DNPAssigment1.Persistance
         {
             var responseMessage = await client.GetAsync("https://localhost:5003/Adults");
             var content = await responseMessage.Content.ReadAsStringAsync();
-            Adults = JsonSerializer.Deserialize<IList<Adult>>(content, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            IList<Adult> Adults = JsonSerializer.Deserialize<List<Adult>>(content);
             return Adults;
         }
 

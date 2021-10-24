@@ -46,7 +46,7 @@ namespace DNPAssigment1.Persistance
        
         public async Task<List<Adult>> LoadAdultsAsync()
         {
-            List<Adult> tmp=new List<Adult>(Adults);
+            List<Adult> tmp = new List<Adult>(Adults);
             return tmp.ToList();
         }
 

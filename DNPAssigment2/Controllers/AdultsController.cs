@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DNPAssigment1.Models;
 using DNPAssigment1.Persistance;
@@ -65,7 +66,7 @@ namespace DNPAssigment2.Controllers
             try
             {
                 var adults = await Iadult.LoadAdultsAsync();
-                return Ok(adults);
+                return Ok(JsonSerializer.Serialize(adults));
             }
             catch (Exception e)
             {
