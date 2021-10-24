@@ -12,7 +12,7 @@ namespace DNPAssigment1.Persistance
         public Task<Adult> AddAdult(Adult adult);
         public Task<List<Adult>> LoadAdultsAsync();
 
-        public Task<List<Adult>> RemoveAdult(int ID);
+        public Task RemoveAdult(int ID);
 
 
 

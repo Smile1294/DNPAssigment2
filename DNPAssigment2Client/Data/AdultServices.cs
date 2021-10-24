@@ -35,7 +35,6 @@ namespace DNPAssigment1.Persistance
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
-            Console.WriteLine(adult);
             return adult;
 
         }
@@ -55,14 +54,17 @@ namespace DNPAssigment1.Persistance
 
         public async Task AddAdultAsync(Adult adult)
         {
-            int max = Adults.Max(adult => adult.Id);
-            adult.Id = (++max);
+            Random rnd = new Random();
+            adult.Id = rnd.Next();
+            Console.WriteLine("ok");
             var adultAsJson = JsonSerializer.Serialize(adult);
             var content = new StringContent(
                 adultAsJson,
                 Encoding.UTF8,
                 "application/json"
             );
+            Console.WriteLine(content);
+            Console.WriteLine(adultAsJson);
             var responseMessage = await client.PutAsync("https://localhost:5003/Adults",content);
             if(!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -73,16 +75,17 @@ namespace DNPAssigment1.Persistance
         {
             var responseMessage = await client.GetAsync("https://localhost:5003/Adults");
             var content = await responseMessage.Content.ReadAsStringAsync();
-            IList<Adult> Adults = JsonSerializer.Deserialize<List<Adult>>(content);
+            Adults = JsonSerializer.Deserialize<List<Adult>>(content);
+            Console.WriteLine(Adults.Count);
             return Adults;
         }
 
         public async Task RemoveAdultAsync(int ID)
         {
             var responseMessage = await client.DeleteAsync($"https://localhost:5003/Adults/{ID}");
+            Console.WriteLine(responseMessage.IsSuccessStatusCode);
             if(!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
-            
         }
 
     }

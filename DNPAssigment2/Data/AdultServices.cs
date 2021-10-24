@@ -30,7 +30,6 @@ namespace DNPAssigment1.Persistance
             Adult adult = Adults.First(t => t.Id == adultd.Id);
             Adults.Remove(adult);
             Adults.Add(adultd);
-
             SaveChanges();  
         }
 
@@ -50,12 +49,12 @@ namespace DNPAssigment1.Persistance
             return tmp.ToList();
         }
 
-        public async Task<List<Adult>> RemoveAdult(int ID)
+        public async Task RemoveAdult(int ID)
         {
             Adult adult = Adults.First(t => t.Id == ID);
             Adults.Remove(adult);
-            List<Adult> tmp=new List<Adult>(Adults);
-            return tmp.ToList();
+            List<Adult> tmp= new List<Adult>(Adults);
+            await SaveChanges();
         }
 
         public List<T> ReadData<T>(string s)
@@ -67,7 +66,7 @@ namespace DNPAssigment1.Persistance
         }
 
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
             // storing persons
             string jsonAdults = JsonSerializer.Serialize(Adults, new JsonSerializerOptions

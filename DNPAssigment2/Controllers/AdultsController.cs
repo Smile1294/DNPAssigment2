@@ -35,7 +35,7 @@ namespace DNPAssigment2.Controllers
             }
         }
         [HttpDelete ("{id}")]
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync([FromRoute] int id)
         {
             try
             {
@@ -78,13 +78,16 @@ namespace DNPAssigment2.Controllers
         [HttpPut]
         public async Task<ActionResult<Adult>> AddAdult([FromBody] Adult adult)
         {
+            Console.WriteLine(ModelState);
             if (!ModelState.IsValid)
             {
+                Console.WriteLine(ModelState);
                 return BadRequest(ModelState);
             }
 
             try
             {
+                Console.WriteLine(adult);
                 await Iadult.AddAdult(adult);
                 return Created($"/{adult.Id}", adult);
             }

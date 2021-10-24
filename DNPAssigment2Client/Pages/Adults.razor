@@ -98,19 +98,18 @@
   protected override async Task OnInitializedAsync()
   {
     adults = await iServices.GetAdultsAsync();
+    adultstoshow = adults.ToList();
     Filter(new ChangeEventArgs());
-    await Task.Delay(1000);
   }
 
   private async void RemoveAdult(int Id)
-  {
+  {    
+    Adult remove = adults.First(a => a.Id == Id);
+    adults.Remove(remove);
+    adultstoshow.Remove(remove);
     await iServices.RemoveAdultAsync(Id);
-    adults = await iServices.GetAdultsAsync();
-
-    Filter(new ChangeEventArgs());
-
-    
   }
+  
 
   private void Edit(int Id)
   {
