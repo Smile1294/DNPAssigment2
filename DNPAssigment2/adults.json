@@ -88,20 +88,5 @@
     "Weight": 99.8,
     "Height": 147,
     "Sex": "F"
-  },
-  {
-    "JobTitle": {
-      "JobTitle": "Janitor",
-      "Salary": 61437
-    },
-    "Id": 7,
-    "FirstName": "Cataleya",
-    "LastName": "Mcintyre",
-    "HairColor": "Blond",
-    "EyeColor": "Blue",
-    "Age": 52,
-    "Weight": 56.8,
-    "Height": 172,
-    "Sex": "F"
   }
 ]
