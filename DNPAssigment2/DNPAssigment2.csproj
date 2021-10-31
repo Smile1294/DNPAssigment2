@@ -8,4 +8,8 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Class Diagram0.png" />
+    </ItemGroup>
+
 </Project>
